@@ -8,7 +8,7 @@ from streamlit_echarts import Map as st_Map
 from streamlit_echarts import st_pyecharts
 
 
-df = pd.read_excel('/Users/jinyixuan/Downloads/区域数据源调研表.xlsx', skiprows=1)
+df = pd.read_excel('区域数据源调研表.xlsx', skiprows=1)
 df_tmp = df[['大区', '省']].groupby('省').count()
 res = []
 for area in df_tmp.index:
