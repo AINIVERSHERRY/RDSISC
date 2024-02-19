@@ -68,10 +68,14 @@ if option:
                 # tile.title('🎈')
                 tile.markdown("🔻%s" % df_tmp.loc[idx, '区域数据源名称'].replace('\n', '-'))
                 tile.markdown(f"覆盖地区：{df_tmp.loc[idx, '市'] if df_tmp.loc[idx, '市'] != 'ALL' else option}")
-                tile.markdown("患者总量（万）：%s" % int(df_tmp.loc[idx, '总患者数量\n（万）']) if df_tmp.loc[idx, '总患者数量\n（万）'] != '' else '未知')
+                tile.markdown("患者总量：%s万" % int(df_tmp.loc[idx, '总患者数量\n（万）']) if df_tmp.loc[idx, '总患者数量\n（万）'] != '' else '未知')
                 tile.markdown(f"时间范围：{df_tmp.loc[idx, '数据时间范围']}")
                 tile.markdown("数据获取方式：%s" % df_tmp.loc[idx, '数据获取方式\n（直连/上报/抄数...）'])
                 # 地区代表性
+                if df_tmp.loc[idx, '总.1'] == '':
+                    tile.markdown(f"医院总数：未知")
+                else:
+                    tile.markdown(f"医院总数：{df_tmp.loc[idx, '总.1']}")
                 if df_tmp.loc[idx, '三甲.1'] == '' or df_tmp.loc[idx, '三甲.2'] == '':
                     tile.markdown(f"三甲覆盖比例：未知")
                 else:
