@@ -57,9 +57,9 @@ if option:
         # st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
         # st.write(df[['区域数据源名称', '大区', '省', '市', '三甲', '三级', '二级', '总', '总患者数量\n（万）', '数据时间范围', '数据获取方式\n（直连/上报/抄数...）', '是否需要卫建委审批', '是否支持\n驻场', '是否已有合作']][df['省'] == option].sort_values('区域数据源名称').reset_index(drop=True))
         df_tmp = df[df['省'] == option].sort_values('区域数据源名称').reset_index(drop=True).fillna('')
-        row1 = st.columns(3)
-        row2 = st.columns(3)
-        row3 = st.columns(3)
+        row1 = st.columns(2)
+        row2 = st.columns(2)
+        row3 = st.columns(2)
         for idx, col in enumerate(row1 + row2 + row3):
             if idx <= max(df_tmp.index):
                 # label = f"{df_tmp.loc[idx, '区域数据源名称'].replace('\n', '-')}-{df_tmp.loc[idx, '市'] if df_tmp.loc[idx, '市'] != 'ALL' else option}"
@@ -76,18 +76,27 @@ if option:
                     tile.markdown(f"医院总数：未知")
                 else:
                     tile.markdown(f"医院总数：{df_tmp.loc[idx, '总.1']}")
-                if df_tmp.loc[idx, '三甲.1'] == '' or df_tmp.loc[idx, '三甲.2'] == '':
-                    tile.markdown(f"三甲覆盖比例：未知")
+                # 三甲医院覆盖情况
+                numerator = int(df_tmp.loc[idx, '三甲.1']) if df_tmp.loc[idx, '三甲.1'] != '' else 'null'
+                denominator = int(df_tmp.loc[idx, '三甲.2']) if df_tmp.loc[idx, '三甲.2'] != '' else 'null'
+                if numerator == 'null' or denominator == 'null':
+                    tile.markdown("三甲覆盖比例：未知（%s/%s）" % (numerator, denominator))
                 else:
-                    tile.markdown(f"三甲覆盖比例：{int(100 * df_tmp.loc[idx, '三级.1']/df_tmp.loc[idx, '三级.2'])}%")
-                if df_tmp.loc[idx, '三级.1'] == '' or df_tmp.loc[idx, '三级.2'] == '':
-                    tile.markdown(f"三级覆盖比例：未知")
+                    tile.markdown("三甲覆盖比例：%s%s（%s/%s）" % (int(100*numerator/denominator), '%', numerator, denominator))
+                # 三级医院覆盖情况
+                numerator = int(df_tmp.loc[idx, '三级.1']) if df_tmp.loc[idx, '三级.1'] != '' else 'null'
+                denominator = int(df_tmp.loc[idx, '三级.2']) if df_tmp.loc[idx, '三级.2'] != '' else 'null'
+                if numerator == 'null' or denominator == 'null':
+                    tile.markdown("三级覆盖比例：未知（%s/%s）" % (numerator, denominator))
                 else:
-                    tile.markdown(f"三级覆盖比例：{int(100 * df_tmp.loc[idx, '三级.1']/df_tmp.loc[idx, '三级.2'])}%")
-                if df_tmp.loc[idx, '二级.1'] == '' or df_tmp.loc[idx, '二级.2'] == '':
-                    tile.markdown(f"二级覆盖比例：未知")
+                    tile.markdown("三级覆盖比例：%s%s（%s/%s）" % (int(100*numerator/denominator), '%', numerator, denominator))
+                # 二级医院覆盖情况
+                numerator = int(df_tmp.loc[idx, '二级.1']) if df_tmp.loc[idx, '二级.1'] != '' else 'null'
+                denominator = int(df_tmp.loc[idx, '二级.2']) if df_tmp.loc[idx, '二级.2'] != '' else 'null'
+                if numerator == 'null' or denominator == 'null':
+                    tile.markdown("二级覆盖比例：未知（%s/%s）" % (numerator, denominator))
                 else:
-                    tile.markdown(f"二级覆盖比例：{int(100 * df_tmp.loc[idx, '二级.1']/df_tmp.loc[idx, '二级.2'])}%")
+                    tile.markdown("二级覆盖比例：%s%s（%s/%s）" % (int(100*numerator/denominator), '%', numerator, denominator))
         # st.write(set(df[df['省'] == option]['区域数据源名称']))
     with tab3:
         #    st.header("owl")
