@@ -51,6 +51,8 @@ if option:
     with tab1:
         # st.header("a cat")
         # st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
+        # df_tmp = df[['三甲.2', '三级.2', '二级.2', '总.2', '区域人口数量\n（截止2021年）']][df['省'] == option].iloc[0, 0:]
+        # st.write(f"{option}2021年常住人口{df_tmp['区域人口数量\n（截止2021年）']}万，该地区有{df_tmp['三甲.2']}家三甲医院")
         st.write(df[['三甲.2', '三级.2', '二级.2', '总.2', '区域人口数量\n（截止2021年）']][df['省'] == option].iloc[0, 0:])
     with tab2:
         # st.header("a dog")
@@ -69,8 +71,8 @@ if option:
                 tile.markdown("🔻%s" % df_tmp.loc[idx, '区域数据源名称'].replace('\n', '-'))
                 tile.markdown(f"覆盖地区：{df_tmp.loc[idx, '市'] if df_tmp.loc[idx, '市'] != 'ALL' else option}")
                 tile.markdown("患者总量：%s万" % int(df_tmp.loc[idx, '总患者数量\n（万）']) if df_tmp.loc[idx, '总患者数量\n（万）'] != '' else '患者总量：未知')
-                tile.markdown(f"时间范围：{df_tmp.loc[idx, '数据时间范围']}")
-                tile.markdown("数据获取方式：%s" % df_tmp.loc[idx, '数据获取方式\n（直连/上报/抄数...）'])
+                tile.markdown(f"时间范围：{df_tmp.loc[idx, '数据时间范围']}" if df_tmp.loc[idx, '数据时间范围'] != '' else '时间范围：未知')
+                tile.markdown("数据获取方式：%s" % df_tmp.loc[idx, '数据获取方式\n（直连/上报/抄数...）'] if df_tmp.loc[idx, '数据获取方式\n（直连/上报/抄数...）'] != '' else '数据获取方式：未知')
                 # 地区代表性
                 if df_tmp.loc[idx, '总.1'] == '':
                     tile.markdown(f"医院总数：未知")
