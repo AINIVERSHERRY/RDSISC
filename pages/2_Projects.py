@@ -15,3 +15,14 @@ st.write(df_sq)
 st.header('正式项目')
 df_zs = pd.read_excel('./data/xmhz.xlsx', sheet_name='正式项目')
 st.write(df_zs)
+
+
+footer="""<style>.footer {
+position: fixed;left: 0;bottom: 0;width: 100%;background-color: white;color: black;text-align: center;
+}
+</style>
+<div class="footer">
+<p>xin.jin02@hlifetech.com</p>
+</div>
+"""
+st.markdown(footer, unsafe_allow_html=True)

@@ -25,6 +25,7 @@ RDSISC（Regional data source information sharing community）是一个开源的
 
 """)
 
+
 footer="""<style>.footer {
 position: fixed;left: 0;bottom: 0;width: 100%;background-color: white;color: black;text-align: center;
 }
