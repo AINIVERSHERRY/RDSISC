@@ -8,6 +8,12 @@ from streamlit_echarts import Map as st_Map
 from streamlit_echarts import st_pyecharts
 
 
+st.set_page_config(
+    page_title="中国区域数据资源共享社区",
+    page_icon="🌍",
+)
+
+
 df = pd.read_excel('./data/dyb.xlsx', skiprows=1)
 df_tmp = df[['大区', '省']].groupby('省').count()
 res = []
