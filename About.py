@@ -2,7 +2,7 @@ import streamlit as st
 
 
 st.set_page_config(
-    page_title="中国区域医疗数据资源共享社区",
+    page_title="中国区域数据资源共享社区",
     page_icon="🌍",
     # layout="wide",
     # initial_sidebar_state="expanded",
