@@ -3,7 +3,6 @@ import pandas as pd
 import streamlit as st
 from pyecharts import options as opts
 from pyecharts.charts import Map
-from pyecharts.faker import Faker
 from streamlit_echarts import Map as st_Map
 from streamlit_echarts import st_pyecharts
 
@@ -30,8 +29,8 @@ with open("./data/china.geo.json", "r") as f:
 c = Map(init_opts=opts.InitOpts(bg_color="white"))
 c.add("区域数据源概览", res, "china")
 c.set_series_opts(
-        label_opts=opts.LabelOpts(is_show=False)
-        , showLegendSymbol=False
+        label_opts=opts.LabelOpts(is_show=False),
+        showLegendSymbol=False,
         )
 c.set_global_opts(
     # title_opts=opts.TitleOpts(title="Map china"),
@@ -44,37 +43,27 @@ st_pyecharts(c, map=map, height=500)
 option = st.selectbox(
    label="",
    options=[f"{i[0]}" for i in res],
-#    options=[i[0] for i in res],
    index=None,
    placeholder="请选择关注的区域",
 )
-# st.write('You selected:', option)
 
 
 # 区域信息
 tab1, tab2, tab3 = st.tabs(["区域基本信息", "供应商名单", "既往合作项目"])
 if option:
     with tab1:
-        # st.header("a cat")
-        # st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
         # df_tmp = df[['三甲.2', '三级.2', '二级.2', '总.2', '区域人口数量\n（截止2021年）']][df['省'] == option].iloc[0, 0:]
         # st.write(f"{option}2021年常住人口{df_tmp['区域人口数量\n（截止2021年）']}万，该地区有{df_tmp['三甲.2']}家三甲医院")
         st.write(df[['三甲.2', '三级.2', '二级.2', '总.2', '区域人口数量\n（截止2021年）']][df['省'] == option].iloc[0, 0:])
     with tab2:
-        # st.header("a dog")
-        # st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
-        # st.write(df[['区域数据源名称', '大区', '省', '市', '三甲', '三级', '二级', '总', '总患者数量\n（万）', '数据时间范围', '数据获取方式\n（直连/上报/抄数...）', '是否需要卫建委审批', '是否支持\n驻场', '是否已有合作']][df['省'] == option].sort_values('区域数据源名称').reset_index(drop=True))
         df_tmp = df[df['省'] == option].sort_values('区域数据源名称').reset_index(drop=True).fillna('')
         row1 = st.columns(2)
         row2 = st.columns(2)
         row3 = st.columns(2)
         for idx, col in enumerate(row1 + row2 + row3):
             if idx <= max(df_tmp.index):
-                # label = f"{df_tmp.loc[idx, '区域数据源名称'].replace('\n', '-')}-{df_tmp.loc[idx, '市'] if df_tmp.loc[idx, '市'] != 'ALL' else option}"
-                # tile = col.expander(label)
                 tile = col.container(border=True)
-                # tile.title('🎈')
-                tile.markdown("🔻%s" % df_tmp.loc[idx, '区域数据源名称'].replace('\n', '-'))
+                tile.markdown("🔻%s" % df_tmp.loc[idx, '区域数据源名称'].replace('\n', '-').replace('（', '').replace('）', '').replace(' ', ''))
                 tile.markdown(f"覆盖地区：{df_tmp.loc[idx, '市'] if df_tmp.loc[idx, '市'] != 'ALL' else option}")
                 tile.markdown("患者总量：%s万" % int(df_tmp.loc[idx, '总患者数量\n（万）']) if df_tmp.loc[idx, '总患者数量\n（万）'] != '' else '患者总量：未知')
                 tile.markdown(f"时间范围：{df_tmp.loc[idx, '数据时间范围']}" if df_tmp.loc[idx, '数据时间范围'] != '' else '时间范围：未知')
@@ -83,7 +72,7 @@ if option:
                 if df_tmp.loc[idx, '总.1'] == '':
                     tile.markdown(f"医院总数：未知")
                 else:
-                    tile.markdown(f"医院总数：{df_tmp.loc[idx, '总.1']}")
+                    tile.markdown(f"医院总数：{int(df_tmp.loc[idx, '总.1'])}")
                 # 三甲医院覆盖情况
                 numerator = int(df_tmp.loc[idx, '三甲.1']) if df_tmp.loc[idx, '三甲.1'] != '' else 'null'
                 denominator = int(df_tmp.loc[idx, '三甲.2']) if df_tmp.loc[idx, '三甲.2'] != '' else 'null'
@@ -105,10 +94,7 @@ if option:
                     tile.markdown("二级覆盖比例：未知（%s/%s）" % (numerator, denominator))
                 else:
                     tile.markdown("二级覆盖比例：%s%s（%s/%s）" % (int(100*numerator/denominator), '%', numerator, denominator))
-        # st.write(set(df[df['省'] == option]['区域数据源名称']))
     with tab3:
-        #    st.header("owl")
-        # st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
         st.write('需要和项目数据库关联')
 
 
