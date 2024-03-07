@@ -56,14 +56,14 @@ if option:
         # st.write(f"{option}2021年常住人口{df_tmp['区域人口数量\n（截止2021年）']}万，该地区有{df_tmp['三甲.2']}家三甲医院")
         st.write(df[['三甲.2', '三级.2', '二级.2', '总.2', '区域人口数量\n（截止2021年）']][df['省'] == option].iloc[0, 0:])
     with tab2:
-        df_tmp = df[df['省'] == option].sort_values('区域数据源名称').reset_index(drop=True).fillna('')
+        df_tmp = df[df['省'] == option].sort_values(['供应商名称', '数据源名称']).reset_index(drop=True).fillna('')
         row1 = st.columns(2)
         row2 = st.columns(2)
         row3 = st.columns(2)
         for idx, col in enumerate(row1 + row2 + row3):
             if idx <= max(df_tmp.index):
                 tile = col.container(border=True)
-                tile.markdown("🔻%s" % df_tmp.loc[idx, '区域数据源名称'].replace('\n', '-').replace('（', '').replace('）', '').replace(' ', ''))
+                tile.markdown("🔻%s-%s" % (df_tmp.loc[idx, '供应商名称'].replace(' ', '').replace('\n', ''), df_tmp.loc[idx, '数据源名称'].replace('（', '-').replace('）', '').replace(' ', '').replace('\n', '')))
                 tile.markdown(f"覆盖地区：{df_tmp.loc[idx, '市'] if df_tmp.loc[idx, '市'] != 'ALL' else option}")
                 tile.markdown("患者总量：%s万" % int(df_tmp.loc[idx, '总患者数量\n（万）']) if df_tmp.loc[idx, '总患者数量\n（万）'] != '' else '患者总量：未知')
                 tile.markdown(f"时间范围：{df_tmp.loc[idx, '数据时间范围']}" if df_tmp.loc[idx, '数据时间范围'] != '' else '时间范围：未知')
